@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const browser=await chromium.launch({headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});
+const page=await browser.newPage({viewport:{width:1440,height:960}});
+await page.goto('http://127.0.0.1:4173');
+await page.waitForFunction(()=>window.__fireTower?.ready,{timeout:30000});
+await page.locator('#motion').click();
+await page.screenshot({path:'test-results/final-desktop.png'});
+await page.setViewportSize({width:390,height:844});
+await page.screenshot({path:'test-results/final-mobile.png'});
+console.log(JSON.stringify(await page.evaluate(()=>({ready:window.__fireTower.ready,overflow:document.documentElement.scrollWidth>innerWidth}))));
+await browser.close();
