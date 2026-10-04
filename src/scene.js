@@ -35,8 +35,8 @@ function cameraPose(view=currentView){
   if(view==='cabin')return {position:new THREE.Vector3(-.76*h,1.01*h,-1.1*h),target:new THREE.Vector3(-.025*h,.8*h,-.025*h)};
   if(view==='stairs')return {position:new THREE.Vector3(-1.12*h,.8*h,-1.85*h),target:new THREE.Vector3(-.08*h,.42*h,-.24*h)};
   if(exploring)return {position:new THREE.Vector3(1.6*h,1.12*h,-2.1*h),target:new THREE.Vector3(0,.48*h,-.07*h)};
-  if(mobile)return {position:new THREE.Vector3(1.52*h,1.25*h,-2.45*h),target:new THREE.Vector3(0,-.07*h,-.06*h)};
-  return {position:new THREE.Vector3(1.7*h,1.18*h,-2.2*h),target:new THREE.Vector3(.8*h,.52*h,0)};
+  if(mobile)return {position:new THREE.Vector3(1.52*h,1.25*h,2.45*h),target:new THREE.Vector3(0,-.07*h,-.06*h)};
+  return {position:new THREE.Vector3(1.7*h,1.18*h,2.2*h),target:new THREE.Vector3(-.8*h,.52*h,0)};
 }
 function gotoView(view,animate=true){
   currentView=view;const pose=cameraPose(view);
