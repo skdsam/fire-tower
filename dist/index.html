@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#142622"><meta name="description" content="Explore SkdSam’s fire lookout: a detailed Blender tower, an alpine forest, and a little distance from everything.">
+  <title>Fire Tower — A little closer to the wild</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23142622'/%3E%3Cpath d='M6 12L16 5l10 7H6zm5 2h10v6H11zm1 6-3 8m11-8 3 8m-12-3h10' fill='none' stroke='%23e8b979' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preload" href="./assets/tower.glb" as="fetch" crossorigin>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="Fire Tower home"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 16 20 7l11 9H9zm5 1v8h12v-8M15 25l-4 10m14-10 4 10M13 31h14"/></svg><span>FIRE TOWER<small>A PROJECT BY SKDSAM</small></span></a>
+    <nav aria-label="Main navigation"><a href="#lookout">The lookout</a><a href="#details">Field notes</a><a href="https://github.com/skdsam/fire-tower" target="_blank" rel="noopener noreferrer" class="repo-link">View project <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5H5v14h14v-3M12 5h7v7M19 5l-9 9"/></svg></a></nav>
+  </header>
+  <main>
+    <section id="top" class="hero" aria-label="Interactive fire tower landscape">
+      <img class="hero-fallback" src="./assets/scene-preview.png" alt="Timber fire lookout surrounded by alpine pine trees">
+      <div id="scene" aria-hidden="true"></div><div class="hero-shade"></div>
+      <div class="hero-copy"><p class="eyebrow"><span></span> ABOVE THE EVERYDAY</p><h1>A little closer<br>to the <em>wild.</em></h1><p class="intro">A quiet lookout. A forest that stretches forever.<br>A world built one detail at a time.</p><div class="hero-actions"><button id="explore" class="primary">Explore the lookout <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m15 9-2 4-4 2 2-4z"/></svg></button><a href="#lookout" class="text-link">Discover the project</a></div></div>
+      <div class="scene-tools" aria-label="Scene controls"><span class="tool-label">THE LIGHT</span><div class="light-options"><button data-light="golden" aria-pressed="true">Golden hour</button><button data-light="day" aria-pressed="false">Daylight</button><button data-light="blue" aria-pressed="false">Blue hour</button></div><button id="motion" class="icon-button" aria-label="Pause scene motion" title="Pause scene motion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12"/></svg></button></div>
+      <div class="hero-bottom"><a href="#lookout" class="scroll-note"><span class="scroll-line"></span> SCROLL INTO THE FOREST</a><p id="scene-status" role="status">Preparing the lookout…</p><span class="chapter">01 / THE LOOKOUT</span></div>
+      <div id="explore-panel" class="explore-panel" hidden><div><span class="eyebrow">TAKE A LOOK AROUND</span><p>Drag to orbit · Scroll to zoom</p></div><div class="view-buttons"><button data-view="overview" aria-pressed="true">Overview</button><button data-view="cabin" aria-pressed="false">The cabin</button><button data-view="stairs" aria-pressed="false">The climb</button><button id="reset-view" aria-label="Reset camera">Reset view</button><button id="close-explore" aria-label="Close exploration">Done</button></div></div>
+      <noscript><p class="no-script">The scene preview is shown. Enable JavaScript to explore the 3D lookout.</p></noscript>
+    </section>
+    <section id="lookout" class="story section-pad">
+      <div class="section-label"><span>01</span> THE LOOKOUT <span class="label-line"></span></div>
+      <div class="story-grid"><h2>Built for a<br><em>different perspective.</em></h2><div class="story-copy"><p>There’s something about a fire lookout. The timber, the narrow stairs, the windows looking out in every direction. A small room with a very big view.</p><p>This is a digital study of that feeling. A detailed lookout cabin sits above an alpine forest, complete with a wraparound catwalk, exterior switchback stairs, and the tools of a ranger’s day.</p><span class="signature">Made in Blender. Brought to the browser.</span></div></div>
+      <div class="spec-strip"><div><strong>14<span>m</span></strong><p>Above the forest floor</p></div><div><strong>360<span>°</span></strong><p>A view in every direction</p></div><div><strong>4</strong><p>Flights to the lookout</p></div><div class="spec-caption"><span class="eyebrow">THE ORIGINAL SCENE</span><p>Real geometry.<br>Room to explore.</p></div></div>
+    </section>
+    <section id="details" class="details section-pad"><div class="section-label"><span>02</span> FIELD NOTES <span class="label-line"></span></div><div class="details-heading"><h2>The little things<br><em>make the place.</em></h2><p>Look closer. The lookout has<br>a story inside, too.</p></div><div class="details-grid"><figure class="detail-image"><img src="./assets/access-detail.png" alt="Close view of the glazed cabin and exterior stairs aligned with the catwalk gate" loading="lazy" width="715" height="650"><figcaption><span>THE NORTH APPROACH</span><span>Exterior stairs & panoramic glazing</span></figcaption></figure><div class="notes"><article><span class="note-number">01</span><div><h3>A proper way up</h3><p>Four exterior stair flights lead to a gate on the catwalk. The final tread meets the deck, keeping the cabin floor open and the approach outside.</p><button class="detail-view" data-jump="stairs">See the stairs</button></div></article><article><span class="note-number">02</span><div><h3>A room with every view</h3><p>Timber frames, a deep green hip roof, and glass around the cabin. Inside: a firefinder, a radio, a ranger’s cot, and a wood stove.</p><button class="detail-view" data-jump="cabin">Look inside the cabin</button></div></article><article><span class="note-number">03</span><div><h3>A place in the landscape</h3><p>Pine trees, granite outcrops, and rooted grass surround the tower. Layered mountain ridges carry the scene out to the horizon.</p><button class="detail-view" data-jump="overview">Take in the landscape</button></div></article></div></div></section>
+    <section class="closing section-pad"><p class="eyebrow">FROM THE WORKBENCH TO THE WILDERNESS</p><h2>A small tower.<br><em>A whole world around it.</em></h2><a class="primary" href="https://github.com/skdsam/fire-tower" target="_blank" rel="noopener noreferrer">Explore the project on GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5H5v14h14v-3M12 5h7v7M19 5l-9 9"/></svg></a></section>
+  </main>
+  <footer><a class="footer-brand" href="#top">FIRE TOWER</a><p>A digital lookout by SkdSam.</p><a href="#top">Back to the treetops</a></footer>
+  <script type="module" src="./scene.js"></script>
+</body></html>

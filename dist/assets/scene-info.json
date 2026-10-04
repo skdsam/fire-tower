@@ -1,0 +1,11 @@
+{
+  "source": "Firewatch_Improved.blend",
+  "towerObjects": 29,
+  "landscapeObjects": 150,
+  "towerHeight": 19.4,
+  "platformHeight": 14.05,
+  "assets": {
+    "tower.glb": 2052240,
+    "landscape.glb": 1754704
+  }
+}
