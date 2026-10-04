@@ -7,7 +7,7 @@ const host=document.querySelector('#scene'),hero=document.querySelector('.hero')
 const exploreButton=document.querySelector('#explore'),panel=document.querySelector('#explore-panel'),motionButton=document.querySelector('#motion');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let paused=reduced.matches,exploring=false,ready=false,transition=null,currentView='overview',frameCount=0,lastFrame=0,visible=true,time=0,lastTick=performance.now();
-let renderer,controls,scene,camera,sky,sun,ambient,tower,landscape,environmentTarget;
+let renderer,controls,scene,camera,sky,sun,ambient,tower,landscape,environmentTarget,stairBounds;
 const look=new THREE.Vector3(),clockStart=performance.now();
 const params={quality:innerWidth<700?'mobile':'desktop',pixelRatio:Math.min(devicePixelRatio,innerWidth<700?1.25:1.6),shadowSize:innerWidth<700?1024:2048,seed:83};
 const themes={
@@ -33,7 +33,15 @@ function setStatus(text){status.textContent=text;}
 function cameraPose(view=currentView){
   const mobile=host.clientWidth<700;const h=19.4;
   if(view==='cabin')return {position:new THREE.Vector3(-.76*h,1.01*h,-1.1*h),target:new THREE.Vector3(-.025*h,.8*h,-.025*h)};
-  if(view==='stairs')return {position:new THREE.Vector3(-1.12*h,.8*h,-1.85*h),target:new THREE.Vector3(-.08*h,.42*h,-.24*h)};
+  if(view==='stairs'){
+    // Frame the exported meshes in world space: the glTF root changes the
+    // Blender axes, so Blender-side coordinates put the camera behind the cabin.
+    const target=stairBounds?.getCenter(new THREE.Vector3())??new THREE.Vector3(1.5,7.4,6.3);
+    const size=stairBounds?.getSize(new THREE.Vector3())??new THREE.Vector3(2.5,15,6.4);
+    const distance=size.y/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)))*1.35;
+    const aspectFit=Math.max(1,.8/camera.aspect);
+    return {position:target.clone().add(new THREE.Vector3(.43,.2,.9).normalize().multiplyScalar(distance*aspectFit)),target};
+  }
   if(exploring)return {position:new THREE.Vector3(1.6*h,1.12*h,-2.1*h),target:new THREE.Vector3(0,.48*h,-.07*h)};
   if(mobile)return {position:new THREE.Vector3(1.52*h,1.25*h,2.45*h),target:new THREE.Vector3(0,-.07*h,-.06*h)};
   return {position:new THREE.Vector3(1.7*h,1.18*h,2.2*h),target:new THREE.Vector3(-.8*h,.52*h,0)};
@@ -68,6 +76,8 @@ async function init(){
   const loader=new GLTFLoader();
   const [towerAsset,landscapeAsset]=await Promise.all([loader.loadAsync(new URL('./assets/tower.glb',import.meta.url).href),loader.loadAsync(new URL('./assets/landscape.glb',import.meta.url).href)]);
   tower=towerAsset.scene;landscape=landscapeAsset.scene;
+  tower.updateMatrixWorld(true);stairBounds=new THREE.Box3();
+  tower.traverse(o=>{if(o.isMesh&&o.name.includes('Exterior_Switchback'))stairBounds.union(new THREE.Box3().setFromObject(o));});
   tower.traverse(o=>{if(o.isMesh){o.castShadow=!o.name.includes('Glass');o.receiveShadow=true;if(o.name.includes('Glass')){o.material.transparent=true;o.material.opacity=.3;o.material.depthWrite=false;o.material.side=THREE.DoubleSide;}if(o.material){o.material.envMapIntensity=.5;}}});
   landscape.updateMatrixWorld(true);
   const groups=new Map(),remove=[];
@@ -80,7 +90,7 @@ async function init(){
   for(const g of groups.values()){const inst=new THREE.InstancedMesh(g.geometry,g.material,g.items.length);g.items.forEach((m,i)=>inst.setMatrixAt(i,m));inst.instanceMatrix.needsUpdate=true;inst.castShadow=true;inst.receiveShadow=true;landscape.add(inst);}
   remove.forEach(o=>o.removeFromParent());scene.add(tower,landscape);
   ready=true;exploreButton.disabled=false;document.querySelector('.hero-fallback').style.opacity='0';setStatus('YOUR LOOKOUT · LIVE 3D');
-  window.__fireTower={ready:true,source:'Firewatch_Improved.blend',towerMeshes:29,quality:params.quality,get diagnostics(){return {calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,frames:frameCount,theme:themeName,view:currentView,motionPaused:paused};}};
+  window.__fireTower={ready:true,source:'Firewatch_Improved.blend',towerMeshes:29,quality:params.quality,get diagnostics(){return {calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,frames:frameCount,theme:themeName,view:currentView,motionPaused:paused,cameraPosition:camera.position.toArray(),cameraTarget:controls.target.toArray(),stairCenter:stairBounds.getCenter(new THREE.Vector3()).toArray()};}};
   requestAnimationFrame(render);
 }
 function resize(){if(!renderer)return;const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();gotoView(currentView,false);}

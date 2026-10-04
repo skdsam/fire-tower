@@ -1,0 +1,17 @@
+import { chromium } from 'playwright';
+const browser=await chromium.launch({headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});
+const page=await browser.newPage({viewport:{width:1440,height:960},reducedMotion:'reduce'});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto('http://127.0.0.1:4173');
+await page.waitForFunction(()=>window.__fireTower?.ready,{timeout:30000});
+await page.evaluate(()=>{document.querySelector('#explore').click();document.querySelector('[data-view="stairs"]').click();});
+await page.waitForFunction(()=>window.__fireTower.diagnostics.view==='stairs');
+const desktop=await page.evaluate(()=>window.__fireTower.diagnostics);
+if(desktop.cameraPosition[2]<=desktop.stairCenter[2])throw Error('Camera is behind the stair side');
+if(desktop.cameraTarget.some((n,i)=>Math.abs(n-desktop.stairCenter[i])>.01))throw Error('Camera does not target the stairs');
+await page.screenshot({path:'test-results/climb-fixed-desktop.png'});
+await page.setViewportSize({width:390,height:844});
+await page.waitForFunction(()=>window.__fireTower.diagnostics.cameraPosition[2]>window.__fireTower.diagnostics.stairCenter[2]);
+await page.screenshot({path:'test-results/climb-fixed-mobile.png'});
+console.log(JSON.stringify({desktop,mobile:await page.evaluate(()=>window.__fireTower.diagnostics),errors}));
+await browser.close();if(errors.length)process.exitCode=1;
